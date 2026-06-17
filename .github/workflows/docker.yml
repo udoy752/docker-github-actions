@@ -27,19 +27,24 @@ jobs:
       - name: Test Docker Image 
         run: | 
           docker run -d -p 8080:80 --name test-nginx mynginx:test 
-          sleep 5 
+          sleep 10 # একটু সময় বাড়িয়ে দিন যেন কন্টেইনার পুরোপুরি রেডি হয়
+          
+      - name: Health check and Test
+        run: |
+          curl -f http://localhost:8080 
+          # টেক্সট চেক করা
           curl http://localhost:8080 | grep "This is a docker lab using nginx"
+
+      - name: Cleanup
+        if: always()
+        run: |
+          docker stop test-nginx
+          docker rm test-nginx
       # push Image  
       - name: Push To Dockerhub 
         run: | 
           docker tag mynginx:test ${{ secrets.DOCKER_USERNAME }}/mynginx:latest 
-          docker push ${{ secrets.DOCKER_USERNAME }}/mynginx:latest  
-      - name: Health check
-        run: |
-          curl -f http://localhost:8080 || exit 1 
-      - name: Tag version
-        run: |
-          docker tag mynginx:test ${{ secrets.DOCKER_USERNAME }}/mynginx:${{ github.sha }}
+          docker push ${{ secrets.DOCKER_USERNAME }}/mynginx:latest 
 
 
 
