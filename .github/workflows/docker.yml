@@ -2,7 +2,7 @@ name: Docker Github Actions
 
 on: 
   pull_request: 
-    type: [closed]
+    types: [closed]
     branches: 
       - main 
 
