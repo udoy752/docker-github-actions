@@ -28,8 +28,7 @@ jobs:
         run: | 
           docker run -d -p 8080:80 --name test-nginx mynginx:test 
           sleep 5 
-          curl http://localhost:8080 | grep "This is a docker lab using nginx" 
-          docker stop test-nginx
+          curl http://localhost:8080 | grep "This is a docker lab using nginx"
       # push Image  
       - name: Push To Dockerhub 
         run: | 
